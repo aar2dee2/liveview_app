@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :pento, Pento.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "pento_dev",
-  hostname: "localhost",
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_NAME"),
+  hostname: System.get_env("DB_URL"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -18,7 +18,7 @@ config :pento, Pento.Repo,
 config :pento, PentoWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 5432],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
