@@ -1,6 +1,5 @@
 run = """
-mix local.hex --if-missing --force
-elixir main.exs
+bash run.sh
 """
 
 entrypoint = "main.exs"
