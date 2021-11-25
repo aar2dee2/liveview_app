@@ -3,8 +3,10 @@ defmodule PentoWeb.WrongLive do
 
   def handle_event("guess", %{"number" => guess} = data, socket) do
     IO.inspect data
+    IO.inspect socket
     cond do
-    guess == socket.assigns.choice -> 
+    #the score was not increasing even when the correct choice was made, since the user input is a string, and the choice is an integer. Hence, string.to_integer was used in the line above.
+    String.to_integer(guess) == socket.assigns.choice -> 
       message = "Your guess is correct! You won!"
       {
       :ok,
