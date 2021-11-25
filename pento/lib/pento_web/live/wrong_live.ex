@@ -3,17 +3,31 @@ defmodule PentoWeb.WrongLive do
 
   def handle_event("guess", %{"number" => guess} = data, socket) do
     IO.inspect data
-    message = "Your guess is: #{guess}. Guess again."
-    score = socket.assigns.score - 1
-    {
-      :noreply, 
+    cond do
+    guess == socket.assigns.choice -> 
+      message = "Your guess is correct! You won!"
+      {
+      :ok,
       assign(
         socket,
+        choice: Enum.random(1..10),
+        score: socket.assigns.score + 1,
         message: message,
-        score: score,
         time: time()
       )
     }
+    true -> message = "Your guess is: #{guess}. Guess again."
+          {
+            :noreply, 
+            assign(
+              socket,
+              choice: socket.assigns.choice,
+              message: message,
+              score: socket.assigns.score - 1,
+              time: time()
+            )
+          }
+    end
   end
 
   def mount(_params, _session, socket) do
@@ -21,6 +35,7 @@ defmodule PentoWeb.WrongLive do
       :ok,
       assign(
         socket,
+        choice: Enum.random(1..10),
         score: 0,
         message: "Guess a number.",
         time: time()
