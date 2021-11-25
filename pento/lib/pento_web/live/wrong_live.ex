@@ -32,6 +32,10 @@ defmodule PentoWeb.WrongLive do
     end
   end
 
+  def handle_event("restart", _, socket) do
+    live_patch to: Routes.live_path(@socket, WrongLive, dir: :asc), replace: true
+  end
+
   def mount(_params, _session, socket) do
     {
       :ok,
@@ -50,29 +54,34 @@ defmodule PentoWeb.WrongLive do
     ~H"""
     <h1>
       Your score: <%= @score %>
-      <%= if @score >= 5 do %>
-        You won!
-        <button type="button">
-        <a href={live_patch to: Routes.live_path(@socket, WrongLive, dir: :asc), replace: true} >
-          Start again</a>
-        </button>
-      <% end %>
     </h1>
-
-    <h2>
-      <%= @message %>
-      It's <%= @time %>
-      The choice is <%= @choice %>
-    </h2>
-
-    <h2>
-      <%= for n <- 1..10 do%>
-        <a href="#" phx-click="guess" phx-value-number={n} >
-          <%= n %>
+      <%= if @score >= 5 do %>
+        <div>
+        <h2>
+        You won!
+        </h2>
+        <a href="#" phx-click="restart">
+        <button type="button">
+          Start again
+        </button>
         </a>
+        
+        </div>
+      <%= else %>
+        <h2>
+          <%= @message %>
+          It's <%= @time %>
+          The choice is <%= @choice %>
+        </h2>
+
+        <h2>
+          <%= for n <- 1..10 do%>
+            <a href="#" phx-click="guess" phx-value-number={n} >
+              <%= n %>
+            </a>
+          <% end %>
+        </h2>
       <% end %>
-    </h2>
-    
     """
   end
 
