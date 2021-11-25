@@ -5,11 +5,11 @@ defmodule PentoWeb.WrongLive do
     IO.inspect data
     IO.inspect socket
     cond do
-    #the score was not increasing even when the correct choice was made, since the user input is a string, and the choice is an integer. Hence, string.to_integer was used in the line above.
+    #the score was not increasing even when the correct choice was made, since the user input is a string, and the choice is an integer. Hence, string.to_integer was used in the line below.
     String.to_integer(guess) == socket.assigns.choice -> 
-      message = "Your guess is correct! You won!"
+      message = "Your guess is correct!"
       {
-      :ok,
+      :noreply,
       assign(
         socket,
         choice: Enum.random(1..10),
@@ -50,11 +50,19 @@ defmodule PentoWeb.WrongLive do
     ~H"""
     <h1>
       Your score: <%= @score %>
+      <%= if @score >= 5 do %>
+        You won!
+        <button type="button">
+        <a href={live_patch to: Routes.live_path(@socket, WrongLive, dir: :asc), replace: true} >
+          Start again</a>
+        </button>
+      <% end %>
     </h1>
 
     <h2>
       <%= @message %>
       It's <%= @time %>
+      The choice is <%= @choice %>
     </h2>
 
     <h2>
