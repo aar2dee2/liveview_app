@@ -10,7 +10,8 @@ defmodule PentoWeb.WrongLive do
       assign(
         socket,
         message: message,
-        score: score
+        score: score,
+        time: time()
       )
     }
   end
@@ -21,7 +22,8 @@ defmodule PentoWeb.WrongLive do
       assign(
         socket,
         score: 0,
-        message: "Guess a number."
+        message: "Guess a number.",
+        time: time()
       )
     }
   end
@@ -35,6 +37,7 @@ defmodule PentoWeb.WrongLive do
 
     <h2>
       <%= @message %>
+      It's <%= @time %>
     </h2>
 
     <h2>
@@ -46,5 +49,9 @@ defmodule PentoWeb.WrongLive do
     </h2>
     
     """
+  end
+
+  def time() do
+    DateTime.utc_now() |> to_string()
   end
 end
