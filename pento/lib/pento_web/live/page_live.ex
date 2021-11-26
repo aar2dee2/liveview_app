@@ -36,4 +36,10 @@ defmodule PentoWeb.PageLive do
         into: %{},
         do: {app, vsn}
   end
+
+  def render(assigns) do
+    ~H"""
+    Nothing here. Go to <a href="/guess">"/guess"</a>
+    """
+  end
 end
