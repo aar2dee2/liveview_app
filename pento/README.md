@@ -17,3 +17,18 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+
+        live_patch(
+          "Start Again all", 
+          to: Routes.live_path(@socket, WrongLive), 
+          replace: true)
+          }
+
+           <a href={
+        live_patch(
+          "Start Again all", 
+          to: Routes.live_path(@socket, PentoWeb.WrongLive), 
+          replace: true)
+          } >
+        </a>

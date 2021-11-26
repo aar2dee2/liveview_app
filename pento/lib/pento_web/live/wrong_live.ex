@@ -32,16 +32,39 @@ defmodule PentoWeb.WrongLive do
     end
   end
 
-  def handle_event("restart", _, socket) do
+  def handle_params(_params, _, socket) do
     {:noreply, 
-    push_patch(
-      socket, 
-      to: "/guess", 
-      replace: true
+    assign(
+        socket,
+        choice: Enum.random(1..10),
+        score: 0,
+        message: "Guess a number.",
+        time: time()
       )
     }
-    #live_patch to: Routes.live_path(socket, WrongLive, dir: :asc), replace: true
   end
+
+  #so this handle_event clause was not required. To restart the game upon winning, include live_patch directly in the render and a handle_params function is required, as live_patch invokes handle_params (ref: https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Helpers.html#live_patch/2)
+  #handle_params must return {:noreply, socket}. since we want to reset the socket state to start the game again, the assigns for score, choice and message are set for socket again. So basically, handle_params/3 looks like a duplicate of mount/3 in this case. (this is correct as per Jose's comment in this thread https://elixirforum.com/t/mount-vs-handle-params-on-the-liveview-life-cycle/31920/3)
+  #def handle_event("restart", _, socket) do
+    #{:noreply, 
+    #push_patch(
+    #  socket, 
+    #  to: "/guess", 
+    #  replace: true
+    #  )
+    #}
+    #live_patch to: Routes.live_path(socket, WrongLive, dir: :asc), replace: true
+
+  #  {:noreply,
+  #  live_patch(
+  #    to: Routes.live_path(
+  #      socket, PentoWeb.WrongLive
+  #      ),
+  #    replace: true
+  #    )
+  #  }
+  #end
 
   def mount(_params, _session, socket) do
     {
@@ -67,14 +90,13 @@ defmodule PentoWeb.WrongLive do
         <h2>
         You won!
         </h2>
-        <a href="#" phx-click="restart">
-        <button type="button">
-          Start again
-        </button>
-        </a>
+        
+        <%= live_patch to: Routes.live_path(@socket, PentoWeb.WrongLive), replace: true do %>
+          <button type="button">Start again</button>
+        <% end %>
         
         </div>
-      <%= else %>
+      <% else %>
         <h2>
           <%= @message %>
           It's <%= @time %>
