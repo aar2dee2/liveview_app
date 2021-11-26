@@ -15,7 +15,7 @@ config :pento, PentoWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: PentoWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Pento.PubSub,
-  live_view: [signing_salt: "URvPR+tg"]
+  live_view: [signing_salt: System.get_env("SIGNING_SALT")]
 
 # Configures the mailer
 #
