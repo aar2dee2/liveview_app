@@ -33,7 +33,14 @@ defmodule PentoWeb.WrongLive do
   end
 
   def handle_event("restart", _, socket) do
-    live_patch to: Routes.live_path(@socket, WrongLive, dir: :asc), replace: true
+    {:noreply, 
+    push_patch(
+      socket, 
+      to: "/guess", 
+      replace: true
+      )
+    }
+    #live_patch to: Routes.live_path(socket, WrongLive, dir: :asc), replace: true
   end
 
   def mount(_params, _session, socket) do
